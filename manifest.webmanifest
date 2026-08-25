@@ -1,0 +1,17 @@
+{
+  "name": "Superformula Live Studio",
+  "short_name": "Superformula",
+  "description": "Create, hear, save, and export living superformula animations.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#050609",
+  "theme_color": "#050609",
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
