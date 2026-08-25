@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#050609" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta
+      name="description"
+      content="A private-feeling playground for living superformula shapes, audio reactivity, and loop export."
+    />
+    <title>Superformula Live Studio</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Superformula Live Studio home">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span><strong>SUPERFORMULA</strong><small>LIVE STUDIO</small></span>
+        </a>
+        <div class="top-actions">
+          <span class="status-dot" id="audio-status">IDLE</span>
+          <button class="button button-primary" id="randomize-top" type="button">Randomize</button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="stage" aria-label="Animation preview">
+          <canvas id="visual-canvas"></canvas>
+          <div class="stage-vignette" aria-hidden="true"></div>
+
+          <div class="stage-meta">
+            <span class="eyebrow" id="mode-label">ORGANIC SHAPE</span>
+            <h1 id="preset-title">Aurora Bloom</h1>
+            <p id="formula-readout">m 6.93 · n₁ 1.26 · n₂ 3.25 · n₃ 3.25</p>
+          </div>
+
+          <div class="audio-meter" aria-label="Audio response level">
+            <span>BASS</span><i id="meter-bass"></i>
+            <span>VOICE</span><i id="meter-mid"></i>
+            <span>AIR</span><i id="meter-high"></i>
+          </div>
+
+          <div class="quick-dock" aria-label="Quick controls">
+            <div class="segmented" id="mode-switch">
+              <button type="button" class="active" data-mode="shape">Shape</button>
+              <button type="button" data-mode="loader">Loader</button>
+            </div>
+            <button class="icon-button" id="randomize-dock" type="button" title="Randomize" aria-label="Randomize">↻</button>
+            <button class="icon-button" id="toggle-play" type="button" title="Pause animation" aria-label="Pause animation">Ⅱ</button>
+          </div>
+
+          <div class="export-overlay" id="export-overlay" hidden>
+            <div class="spinner"></div>
+            <strong id="export-message">Rendering loop…</strong>
+            <span id="export-progress">0%</span>
+          </div>
+        </section>
+
+        <aside class="control-panel" aria-label="Animation controls">
+          <div class="panel-intro">
+            <span class="eyebrow">LIVE PARAMETERS</span>
+            <p>Drag the form to orbit. Every random result is repeatable from its seed.</p>
+          </div>
+
+          <section class="control-section preset-section">
+            <div class="section-heading"><h2>Curated starts</h2><span>tap to load</span></div>
+            <div class="preset-grid" id="preset-grid"></div>
+          </section>
+
+          <details class="control-section" open>
+            <summary><span>01</span> Form</summary>
+            <div class="control-body two-column" id="form-controls">
+              <label>Symmetry m <output data-output="m"></output><input type="range" data-key="m" min="1" max="18" step="0.01" /></label>
+              <label>Radius n₁ <output data-output="n1"></output><input type="range" data-key="n1" min="0.12" max="6" step="0.01" /></label>
+              <label>Contour n₂ <output data-output="n2"></output><input type="range" data-key="n2" min="0.12" max="8" step="0.01" /></label>
+              <label>Contour n₃ <output data-output="n3"></output><input type="range" data-key="n3" min="0.12" max="8" step="0.01" /></label>
+              <label>Particle field <output data-output="density"></output><input type="range" data-key="density" min="24" max="80" step="2" /></label>
+              <label>Point size <output data-output="particleSize"></output><input type="range" data-key="particleSize" min="0.5" max="2.8" step="0.05" /></label>
+            </div>
+          </details>
+
+          <details class="control-section" open>
+            <summary><span>02</span> Motion & loop</summary>
+            <div class="control-body">
+              <label>Loop length <output data-output="loopDuration"></output><input type="range" data-key="loopDuration" min="2" max="16" step="0.5" /></label>
+              <label>Motion <output data-output="motion"></output><input type="range" data-key="motion" min="0" max="1" step="0.01" /></label>
+              <label>Trail <output data-output="trail"></output><input type="range" data-key="trail" min="0" max="0.55" step="0.01" /></label>
+              <label>Depth <output data-output="depth"></output><input type="range" data-key="depth" min="0.6" max="1.8" step="0.01" /></label>
+            </div>
+          </details>
+
+          <details class="control-section" open>
+            <summary><span>03</span> Color</summary>
+            <div class="control-body color-row">
+              <label><span>Core</span><input type="color" data-key="primary" /></label>
+              <label><span>Edge</span><input type="color" data-key="accent" /></label>
+              <label><span>Void</span><input type="color" data-key="background" /></label>
+              <label>Glow <output data-output="glow"></output><input type="range" data-key="glow" min="0" max="1" step="0.01" /></label>
+            </div>
+          </details>
+
+          <details class="control-section" open>
+            <summary><span>04</span> Make it alive</summary>
+            <div class="control-body">
+              <label>Speech response <output data-output="audioReact"></output><input type="range" data-key="audioReact" min="0" max="1.6" step="0.01" /></label>
+              <div class="audio-actions">
+                <button class="button" id="mic-start" type="button">Use microphone</button>
+                <button class="button" id="audio-stop" type="button" disabled>Stop</button>
+              </div>
+              <label class="file-drop" for="audio-file">
+                <strong>Choose an audio file</strong>
+                <span>Play it here, then export its visual loop</span>
+                <input id="audio-file" type="file" accept="audio/*" />
+              </label>
+              <audio id="audio-player" controls hidden></audio>
+              <p class="hint">Microphone access needs HTTPS or localhost. Audio never leaves this device.</p>
+            </div>
+          </details>
+
+          <details class="control-section" open>
+            <summary><span>05</span> Save & export</summary>
+            <div class="control-body">
+              <div class="seed-row">
+                <label>Seed<input id="seed-input" type="number" min="1" max="999999999" /></label>
+                <button class="button" id="apply-seed" type="button">Apply</button>
+              </div>
+              <div class="save-row">
+                <input id="preset-name" type="text" maxlength="32" placeholder="Preset name" />
+                <button class="button" id="save-preset" type="button">Save</button>
+              </div>
+              <div class="saved-list" id="saved-list"></div>
+              <label>Export duration <output data-output="exportDuration"></output><input type="range" data-key="exportDuration" min="2" max="16" step="0.5" /></label>
+              <label>Export size
+                <select id="export-size">
+                  <option value="720">720 × 720</option>
+                  <option value="1080">1080 × 1080</option>
+                  <option value="1280x720">1280 × 720</option>
+                  <option value="720x1280">720 × 1280</option>
+                </select>
+              </label>
+              <div class="export-grid">
+                <button class="button button-primary" id="export-webm" type="button">WebM loop</button>
+                <button class="button" id="export-gif" type="button">GIF loop</button>
+                <button class="button" id="export-png" type="button">PNG still</button>
+                <button class="button" id="export-json" type="button">Parameters</button>
+              </div>
+              <button class="text-button" id="copy-link" type="button">Copy this variation as a link</button>
+              <p class="hint">Exports are silent visuals. GIF is capped at 640 px for practical mobile memory use.</p>
+            </div>
+          </details>
+        </aside>
+      </main>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

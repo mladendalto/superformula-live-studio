@@ -24,11 +24,9 @@ Then open `http://localhost:8080`.
 
 ## Publish with GitHub Pages
 
-1. Create an empty GitHub repository and upload this folder to its `main` branch.
-2. In **Settings → Pages**, choose **GitHub Actions** as the source if GitHub does not select it automatically.
-3. The included workflow publishes the site after every push to `main`.
+The deployable copy lives in `docs/`. In **Settings → Pages**, select **Deploy from a branch**, choose `main`, and set the folder to `/docs`. GitHub republishes the site after changes reach `main`.
 
-GitHub Pages is publicly reachable for public repositories. Private Pages availability depends on the account plan. The page asks search engines not to index it, but that is not access control.
+GitHub Pages is publicly reachable for public repositories. The page asks search engines not to index it, but that is not access control.
 
 ## Browser notes
 
